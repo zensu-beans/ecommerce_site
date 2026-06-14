@@ -102,7 +102,7 @@
         navbar.classList.toggle('scrolled', window.scrollY > 10);
     });
 
-    // ── 5-click CRUD ──
+    // ── 5-click admin easter egg ──
     (function () {
         const logo = document.getElementById('logo-trigger');
         const hint = document.getElementById('logo-hint');
@@ -340,5 +340,13 @@
 </script>
 <script src="nav.js"></script>
 <div class="logo-hint" id="logo-hint"></div>
+
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<nav class="mobile-bottom-nav">
+    <a href="index.html"><i class='bx bx-home-alt'></i>Home</a>
+    <a href="products.html" class="active"><i class='bx bx-package'></i>Products</a>
+    <a href="about.html"><i class='bx bx-info-circle'></i>About</a>
+    <a href="contact.html"><i class='bx bx-envelope'></i>Contact</a>
+</nav>
 </body>
 </html>
