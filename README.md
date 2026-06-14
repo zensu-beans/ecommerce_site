@@ -8,7 +8,7 @@ htdocs is the magic folder where all your project files must live so Apache can 
 MySQL is the storage vault where your product inventory and admin passwords are kept.
 
 🛠 Step-by-Step Setup Guide
-📂 Step 1: Prepare the XAMPP Folders
+Step 1: Prepare the XAMPP Folders
 Download and install XAMPP.
 
 Open the XAMPP Control Panel on your computer.
@@ -25,7 +25,7 @@ Inside that htdocs folder, create a brand-new folder named crud-store.
 
 Copy and paste all your project files (your HTML files, CSS files, JS files, and the api folder) directly inside this new crud-store folder.
 
-🗄 Step 2: Set Up Your Database (Since setup.sql is deleted)
+Step 2: Set Up Your Database (Since setup.sql is deleted)
 Open your web browser and type this address: http://localhost/phpmyadmin
 
 Look at the very top menu bar and click on the SQL tab.
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 ------------------------------------------------------------------------------------------
 
-🔗 Step 3: Connect Your PHP Code to XAMPP
+Step 3: Connect Your PHP Code to XAMPP
 Your PHP files need permission to read your newly created database.
 
 Go into your crud-store folder, open your api folder, and find your database connection file (usually named db.php, or code located right at the top of your API files).
@@ -81,7 +81,22 @@ $dbname     = "crud_store";   // This must match the database name exactly
 
 ------------------------------------------------------------------------------------------
 
-💻 Step 4: Open and Test Your Store!
+Step 4: Adding the Store Banner table on the Database.
+
+------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS store_banner (
+    id INT PRIMARY KEY,
+    eyebrow VARCHAR(100),
+    title VARCHAR(255),
+    description TEXT,
+    price VARCHAR(100),
+    img_path VARCHAR(300)
+);
+
+------------------------------------------------------------------------------------------
+
+Step 5: Open and Test Your Store!
 Open a clean tab in your web browser.
 
 Go to this address: http://localhost/crud-store/index.html
