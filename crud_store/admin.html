@@ -155,6 +155,177 @@
         .ls-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; }
         .ls-name { font-size: 13px; font-weight: 500; color: #111111; }
         .ls-stock { font-size: 12px; font-weight: 600; color: #e65100; }
+
+        /* ══ MOBILE TOPBAR EXTRAS ══ */
+        .topbar-left-actions { display: none; }
+        .mobile-header-right { display: none; }
+
+        /* ══ BOTTOM NAV — hidden by default, shown only on mobile ══ */
+        .bottom-nav { display: none; }
+
+        /* ════════════════════════════════════════════
+           TABLET  ≤ 1024px  —  icon sidebar layout
+           ════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            /* Prevent any child from blowing out the page width */
+            html, body { overflow-x: hidden; }
+            .shell { grid-template-columns: 72px 1fr; overflow: hidden; }
+
+            /* Collapse sidebar to icon rail */
+            .side { padding: 20px 0; align-items: center; overflow: hidden; }
+            .side-logo { padding: 0 0 20px; border-bottom: 1px solid #222; text-align: center; font-size: 11px; letter-spacing: 2px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+            .side-logo span { display: none; }
+            .side-nav { width: 100%; }
+            .side-label { display: none; }
+            .side-link { padding: 12px 0; justify-content: center; gap: 0; font-size: 0; }
+            .side-link i { font-size: 22px; }
+            .side-foot { padding: 16px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; border-top: 1px solid #222; width: 100%; }
+            .side-foot a { flex-direction: column; gap: 2px; font-size: 0 !important; color: #555555; display: flex; align-items: center; justify-content: center; }
+            .side-foot a i { font-size: 20px; }
+            .side-foot-text { display: none; }
+
+            /* Main area must not overflow */
+            .main { min-width: 0; overflow: hidden; }
+
+            /* Stat grid 2 columns */
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+
+            /* Dash grid stacked */
+            .dash-grid { grid-template-columns: 1fr; }
+
+            /* Topbar & content */
+            .topbar { padding: 0 20px; }
+            .content { padding: 24px 20px; }
+
+            /* Search bar wraps */
+            .bar { flex-wrap: wrap; }
+            .search-wrap { max-width: 100%; width: 100%; }
+
+            /* Table — clip the card, scroll only the inner table */
+            .table-wrap { overflow: hidden; }
+            .table-wrap > table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+            .table-wrap thead, .table-wrap tbody, .table-wrap tr { display: table; width: 100%; table-layout: fixed; }
+            /* Reset: keep native table rendering but allow horizontal scroll */
+            .table-wrap { border-radius: 14px; }
+            .table-wrap > table { display: block; width: max-content; min-width: 100%; overflow-x: auto; }
+            table { width: max-content; min-width: 100%; }
+        }
+
+        /* ════════════════════════════════════════════
+           MOBILE  ≤ 640px  —  bottom nav bar
+           ════════════════════════════════════════════ */
+        @media (max-width: 640px) {
+            html, body { overflow-x: hidden; }
+
+            /* Single column, no sidebar */
+            .shell { grid-template-columns: 1fr; }
+            .side { display: none; }
+
+            /* Fixed topbar */
+            .topbar {
+                padding: 0 16px;
+                height: 56px;
+                position: fixed;
+                top: 0; left: 0; right: 0;
+                z-index: 200;
+            }
+            .topbar-right { gap: 8px; }
+            .topbar-badge { display: none; }
+
+            /* Show back & sign out in the header */
+            .mobile-header-right {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .mobile-header-right a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 11px;
+                font-weight: 500;
+                color: #555555;
+                padding: 6px 10px;
+                border: 1px solid #e6e6e4;
+                border-radius: 8px;
+                background: #f7f7f5;
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .mobile-header-right a i { font-size: 15px; }
+
+            /* Main: offset for fixed topbar + fixed bottom nav */
+            .main {
+                padding-top: 56px;
+                padding-bottom: 64px;
+                min-width: 0;
+                overflow-x: hidden;
+            }
+
+            .content { padding: 20px 16px; }
+
+            /* Bottom nav — shown on mobile */
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 64px;
+                background: #111111;
+                z-index: 200;
+                border-top: 1px solid #222;
+                align-items: stretch;
+            }
+            .bottom-nav-btn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                border: none;
+                background: none;
+                color: #666666;
+                font-size: 9px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                font-family: inherit;
+                cursor: pointer;
+                transition: color 0.2s;
+                padding: 8px 4px;
+            }
+            .bottom-nav-btn i { font-size: 22px; }
+            .bottom-nav-btn:hover,
+            .bottom-nav-btn.active { color: #ffffff; }
+
+            /* Stat grid 2 columns */
+            .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+            .stat-card { padding: 16px; }
+            .stat-num { font-size: 22px; }
+
+            /* Dash grid stacked */
+            .dash-grid { grid-template-columns: 1fr; gap: 12px; }
+
+            /* Table: scroll inside the card without breaking the layout */
+            .table-wrap { overflow: hidden; border-radius: 14px; }
+            .table-wrap > table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; width: max-content; min-width: 100%; }
+
+            /* Search bar stacks */
+            .bar { flex-direction: column; align-items: stretch; gap: 8px; }
+            .search-wrap { max-width: 100%; }
+            .result-label { margin-left: 0; }
+
+            /* Modal */
+            .modal { padding: 24px 20px; border-radius: 12px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+
+            /* Toast above bottom nav */
+            .toast { bottom: 76px; right: 16px; left: 16px; }
+
+            .topbar-title { font-size: 14px; }
+            .sec-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -186,10 +357,10 @@
         </nav>
         <div class="side-foot">
             <a href="index.html" style="display:flex;align-items:center;gap:6px;color:#555555;font-size:12px;transition:color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#555555'">
-                <i class='bx bx-arrow-back' style="font-size:16px;"></i> Back to Store
+                <i class='bx bx-arrow-back' style="font-size:16px;"></i> <span class="side-foot-text">Back to Store</span>
             </a>
             <a href="logout.php" style="display:flex;align-items:center;gap:6px;color:#555555;font-size:12px;margin-top:10px;transition:color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#555555'">
-                <i class='bx bx-log-out' style="font-size:16px;"></i> Sign Out
+                <i class='bx bx-log-out' style="font-size:16px;"></i> <span class="side-foot-text">Sign Out</span>
             </a>
         </div>
     </aside>
@@ -202,6 +373,15 @@
             <span class="topbar-title" id="topbar-title">Dashboard</span>
             <div class="topbar-right">
                 <span class="topbar-badge" id="topbar-badge">Overview</span>
+                <!-- Shown only on mobile (≤640px) -->
+                <div class="mobile-header-right">
+                    <a href="index.html">
+                        <i class='bx bx-arrow-back'></i> Store
+                    </a>
+                    <a href="logout.php">
+                        <i class='bx bx-log-out'></i> Sign Out
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -338,6 +518,26 @@
     </div><!-- /main -->
 </div><!-- /shell -->
 
+<!-- ══ MOBILE BOTTOM NAV (visible only ≤640px) ══ -->
+<nav class="bottom-nav" id="bottom-nav">
+    <button class="bottom-nav-btn active" id="bnav-dashboard" onclick="switchView('dashboard', this); syncBottomNav('bnav-dashboard')">
+        <i class='bx bx-grid-alt'></i>
+        Dash
+    </button>
+    <button class="bottom-nav-btn" id="bnav-inventory" onclick="switchView('inventory', this); syncBottomNav('bnav-inventory')">
+        <i class='bx bx-package'></i>
+        Products
+    </button>
+    <button class="bottom-nav-btn" id="bnav-categories" onclick="switchView('categories', this); syncBottomNav('bnav-categories')">
+        <i class='bx bx-category'></i>
+        Cats
+    </button>
+    <button class="bottom-nav-btn" id="bnav-banner" onclick="switchView('banner', this); syncBottomNav('bnav-banner')">
+        <i class='bx bx-image'></i>
+        Banner
+    </button>
+</nav>
+
 <!-- ══ ADD/EDIT MODAL ══ -->
 <div class="modal-backdrop" id="product-modal">
     <div class="modal">
@@ -444,11 +644,20 @@ async function dbRead() {
 /* ════════════════════════════════════════════
    VIEW SWITCHING
    ════════════════════════════════════════════ */
+function syncBottomNav(activeId) {
+    document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+    const el = document.getElementById(activeId);
+    if (el) el.classList.add('active');
+}
+
 function switchView(name, btn) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.side-link').forEach(l => l.classList.remove('active'));
     document.getElementById('view-' + name).classList.add('active');
     btn.classList.add('active');
+
+    // Keep bottom nav in sync when triggered from the sidebar
+    syncBottomNav('bnav-' + name);
 
     const labels = { dashboard:'Overview', inventory:'Products', categories:'Categories', banner:'Layout Management' };
     const titles = { dashboard:'Dashboard', inventory:'Inventory', categories:'Categories', banner:'Hero Banner Customizer' };
