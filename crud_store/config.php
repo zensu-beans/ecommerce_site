@@ -1,7 +1,4 @@
 <?php
-/* ══════════════════════════════════════════════
-   config.php — Database connection + helpers
-   ══════════════════════════════════════════════ */
 
 // ── Database credentials (XAMPP defaults) ──────
 define('DB_HOST', 'localhost');
