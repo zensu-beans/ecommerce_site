@@ -1,14 +1,4 @@
 <?php
-/* ══════════════════════════════════════════════
-   api/products.php
-   Called by: admin.html  (GET/POST/PUT/DELETE)
-              products.html (GET only — public)
-
-   GET    → list all products (public)
-   POST   → create product   (admin only)
-   PUT    → update product   (admin only)
-   DELETE → delete product   (admin only)
-   ══════════════════════════════════════════════ */
 
 // Allow cross-origin requests from same server
 header('Content-Type: application/json');
