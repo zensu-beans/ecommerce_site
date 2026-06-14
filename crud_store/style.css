@@ -652,6 +652,11 @@ width: 100%;
 z-index: 100;
 }
 
+/* ══ MOBILE BOTTOM NAV — hidden on desktop and tablet ══ */
+.mobile-bottom-nav {
+    display: none !important;
+}
+
 .div4 {
 grid-column: 2;
 grid-row: 2;
@@ -1580,3 +1585,148 @@ gap: 12px;
     opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999;
 }
 .logo-hint.show { opacity: 1; }
+
+/* ══════════════════════════════════════════════
+   MOBILE  ≤ 640px
+   ══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+    html, body { overflow-x: hidden; }
+
+    /* ── Navbar ── */
+    .navbar { padding: 0 20px; height: 56px; }
+    .nav-links { display: none; }
+    .nav-icons a { width: 36px; height: 36px; font-size: 20px; }
+
+    /* ── Page wrap (index / about / contact) ── */
+    .page-wrap { padding-top: 56px; padding-bottom: 72px; }
+
+    /* ── Banner ── */
+    .banner { grid-template-columns: 1fr; min-height: auto; padding-top: 56px; padding-bottom: 0; }
+    .banner-left { padding: 36px 20px 40px; border-right: none; border-bottom: 1px solid #e6e6e4; }
+    .banner-right { height: 56vw; min-height: 220px; position: relative; }
+
+    /* ── Trust bar ── */
+    .trust-bar { flex-wrap: wrap; gap: 14px; padding: 18px 20px; }
+    .trust-item { padding: 0; }
+    .trust-divider { display: none; }
+
+    /* ── Categories section ── */
+    .categories { padding: 48px 20px 72px; }
+    .cat-grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 200px); gap: 12px; }
+    .cat-large, .cat-medium, .cat-small { grid-column: span 1; grid-row: span 1; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+    /* ── Footer ── */
+    .footer { padding: 40px 20px 24px; }
+    .footer-top { flex-direction: column; gap: 28px; }
+    .footer-nav { flex-wrap: wrap; gap: 24px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+
+    /* ── About page ── */
+    .page-header { padding: 36px 20px; }
+    .page-header, .mission, .values, .team { padding-left: 20px; padding-right: 20px; }
+    .mission { grid-template-columns: 1fr; gap: 16px; padding: 40px 20px; }
+    .values { padding: 40px 20px; }
+    .values-row { grid-template-columns: 1fr; gap: 12px; }
+    .team { padding: 40px 20px; }
+    .team-row { grid-template-columns: 1fr; gap: 12px; }
+
+    /* ── Contact page ── */
+    .contact-body { grid-template-columns: 1fr; }
+    .faq-side { padding: 40px 20px; border-right: none; border-bottom: 1px solid #e6e6e4; }
+    .info-side { padding: 36px 20px; }
+
+    /* ── Products page: full reset of the grid layout ── */
+    .parent {
+        display: block;          /* drop the fixed grid entirely */
+        padding-top: 56px;       /* space for fixed navbar */
+        padding-bottom: 64px;    /* space for fixed bottom nav */
+    }
+    .div1 {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 200;
+        width: 100%;
+    }
+    /* Hide the desktop footer bar — bottom nav replaces it */
+    .div3 { display: none !important; }
+
+    /* Sidebar → sticky horizontal pill bar */
+    .div2 { position: static; margin: 0; }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e6e6e4;
+        padding: 10px 16px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: sticky;
+        top: 56px;
+        z-index: 100;
+    }
+    .sidebar .cat { display: none; }
+    .sidebar ul {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+    .sidebar li {
+        margin-bottom: 0;
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid #e6e6e4;
+        background: #ffffff;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .sidebar li.active { background: #111111; border-color: #111111; }
+    .sidebar li.active a { color: #ffffff; font-weight: 500; }
+    .sidebar li a { font-size: 13px; color: #4e4e4e; }
+
+    /* Main product grid area */
+    .div4 { padding: 20px 16px 16px; }
+
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card-name { font-size: 12.5px; }
+    .card-price { font-size: 14px; }
+
+    /* Toast above bottom nav */
+    .toast { bottom: 76px; }
+
+    /* ── Mobile bottom nav ── */
+    .mobile-bottom-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 64px;
+        background: #111111;
+        z-index: 500;
+        border-top: 1px solid #222222;
+        align-items: stretch;
+    }
+    .mobile-bottom-nav a {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        color: #666666;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: color 0.2s;
+        padding: 8px 4px;
+    }
+    .mobile-bottom-nav a i { font-size: 22px; }
+    .mobile-bottom-nav a:hover,
+    .mobile-bottom-nav a.active { color: #ffffff; }
+}
