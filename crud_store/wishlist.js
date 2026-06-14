@@ -1,14 +1,3 @@
-/* ══════════════════════════════════════════════
-   wishlist.js — Global Persistent Wishlist
-   Handles: drawer UI, add/remove, move to cart,
-            badge, localStorage sync across pages.
-   
-   On pages other than products.html, wishlisted
-   items are stored by full object (name, price,
-   img) so they can be displayed in the drawer
-   even without a PRODUCTS array.
-   ══════════════════════════════════════════════ */
-
 const WISH_KEY = 'crud_store_wishlist';
 
 /* ── State: array of { id, name, price, img } ── */
