@@ -1,9 +1,3 @@
-/* ══════════════════════════════════════════════
-   cart.js — Global Persistent Multi-Page Cart
-   Handles: drawer UI, add/remove/qty, badge,
-            localStorage sync across all pages.
-   ══════════════════════════════════════════════ */
-
 const CART_KEY = 'crud_store_cart';
 
 /* ── State ── */
