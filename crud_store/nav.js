@@ -1,10 +1,3 @@
-/* ══════════════════════════════════════════════
-   nav.js — Shared navbar logic for all pages
-   Handles: scroll shadow, search overlay,
-            5-click admin easter egg.
-   Include AFTER cart.js and wishlist.js.
-   ══════════════════════════════════════════════ */
-
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ── Navbar scroll shadow ── */
@@ -85,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ── 5-click admin easter egg ── */
+    /* ── 5-click CRUD ── */
     const logo  = document.getElementById('logo-trigger');
     const hint  = document.getElementById('logo-hint');
     if (logo) {
