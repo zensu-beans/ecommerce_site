@@ -1,8 +1,4 @@
 <?php
-/* ══════════════════════════════════════════════
-   api/banner.php
-   Called by: index.html (GET) & admin.html (GET/PUT)
-   ══════════════════════════════════════════════ */
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
