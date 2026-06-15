@@ -1,38 +1,31 @@
-🗺 How XAMPP Runs Your Store (Mental Map)
+🗺️ How XAMPP Runs Your Store (Mental Map)
 Before jumping in, it helps to understand what you are setting up. XAMPP turns your personal computer into a local website server.
+Apache: The engine that serves your HTML, CSS, and JS web pages to your browser.
+htdocs: The magic folder where all your project files must live so Apache can find them.
+MySQL: The storage vault where your product inventory and admin passwords are kept.
 
-Apache is the engine that serves your HTML, CSS, and JS web pages to your browser.
+🛠️ Step-by-Step Setup Guide
 
-htdocs is the magic folder where all your project files must live so Apache can find them.
-
-MySQL is the storage vault where your product inventory and admin passwords are kept.
-
-🛠 Step-by-Step Setup Guide
 Step 1: Prepare the XAMPP Folders
-Download and install XAMPP.
 
-Open the XAMPP Control Panel on your computer.
+Download and install XAMPP on your computer.
+Open the XAMPP Control Panel.
+Click the Start buttons next to both Apache and MySQL (they will turn green once they are running).
 
-Click the Start buttons next to both Apache and MySQL. (They will turn green once they are running).
+Open your computer's file explorer and navigate to your htdocs folder. (Windows: C:\xampp\htdocs | Mac: /Applications/XAMPP/htdocs/)
 
-Open your computer's file explorer and navigate to this exact folder:
+Create a brand-new folder named crud-store directly inside the htdocs directory.
+Copy and paste all your project files (your HTML, CSS, JS, and the api folder) into this new crud-store folder.
 
-Windows: C:\xampp\htdocs
+Step 2: Set Up Your Database
 
-Mac: /Applications/XAMPP/htdocs/
+Open your web browser and navigate to http://localhost/phpmyadmin.
+Click on the SQL tab located in the top menu bar.
 
-Inside that htdocs folder, create a brand-new folder named crud-store.
+Copy the SQL code block below.
+Paste it into the large white text box and click the Go button at the bottom right.
 
-Copy and paste all your project files (your HTML files, CSS files, JS files, and the api folder) directly inside this new crud-store folder.
-
-Step 2: Set Up Your Database (Since setup.sql is deleted)
-Open your web browser and type this address: http://localhost/phpmyadmin
-
-Look at the very top menu bar and click on the SQL tab.
-
-Copy the entire gray code block below, paste it into the large white text box, and click the Go button at the bottom right.
-
-------------------------------------------------------------------------------------------
+SQL
 
 CREATE DATABASE IF NOT EXISTS crud_store CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE crud_store;
@@ -63,27 +56,14 @@ CREATE TABLE IF NOT EXISTS products (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-------------------------------------------------------------------------------------------
 
-Step 3: Connect Your PHP Code to XAMPP
-Your PHP files need permission to read your newly created database.
+Step 3: Add the Store Banner Table
+Stay in phpmyadmin and ensure you are still on the SQL tab.
 
-Go into your crud-store folder, open your api folder, and find your database connection file (usually named db.php, or code located right at the top of your API files).
+Copy the second SQL code block below.
+Paste it into the text box and click the Go button to generate your homepage content table.
 
-Make sure the database login credentials match XAMPP's default settings exactly:
-
-------------------------------------------------------------------------------------------
-
-$servername = "localhost";
-$username   = "root";         // This is always 'root' in XAMPP
-$password   = "";             // This must be completely empty/blank in XAMPP
-$dbname     = "crud_store";   // This must match the database name exactly
-
-------------------------------------------------------------------------------------------
-
-Step 4: Adding the Store Banner table on the Database.
-
-------------------------------------------------------------------------------------------
+SQL
 
 CREATE TABLE IF NOT EXISTS store_banner (
     id INT PRIMARY KEY,
@@ -94,11 +74,22 @@ CREATE TABLE IF NOT EXISTS store_banner (
     img_path VARCHAR(300)
 );
 
-------------------------------------------------------------------------------------------
+
+Step 4: Connect Your PHP Code to XAMPP
+
+Go back to your computer's file explorer and open your crud-store folder.
+
+Open the api folder and locate your database connection file (this is your config.php file).
+Verify that the database login credentials inside the file match XAMPP's default settings exactly as shown below:
+
+PHP
+$servername = "localhost";
+$username   = "root";         // This is always 'root' in XAMPP
+$password   = "";             // This must be completely empty/blank in XAMPP
+$dbname     = "crud_store";   // This must match the database name exactly
+
 
 Step 5: Open and Test Your Store!
 Open a clean tab in your web browser.
-
-Go to this address: http://localhost/crud-store/index.html
-
-Navigate to your Products page. If your 7 products load onto the screen, everything is configured perfectly!
+Go to this exact address: http://localhost/crud-store/index.html
+Navigate to your Products page. If your products load onto the screen, everything is configured perfectly!
