@@ -147,22 +147,23 @@
             // 1. Get previously saved wishlist
             const storedWishlist = JSON.parse(localStorage.getItem("crud_store_wishlist")) || [];
 
-            // 2. Create a Set of wishlist IDs for instant lookup (much faster than .some())
-            // Convert everything to strings to ensure a perfect match
+            // 2. Create a Set of wishlist IDs for instant lookup
             const wishedIds = new Set(storedWishlist.map(x => String(x.id)));
 
             // 3. Map products with the correct 'wished' status
             PRODUCTS = rawProducts.map(p => ({
                 ...p,
-                id: Number(p.id), // Keep internal ID as number
+                id: Number(p.id),
                 price: Number(p.price),
                 oldPrice: p.oldPrice ? Number(p.oldPrice) : null,
                 stock: Number(p.stock),
                 rating: Number(p.rating),
                 reviews: Number(p.reviews),
-                // Check against our Set using String conversion
                 wished: wishedIds.has(String(p.id)) 
             }));
+
+            // Expose globally so wishlist.js can access live stocks
+            window.PRODUCTS = PRODUCTS;
 
             render();
         } catch (err) {
@@ -229,15 +230,21 @@
             return;
         }
 
-        // 3. Draw the grid
+        // 3. Draw the grid with Dynamic Stock Levels
         grid.innerHTML = list.map(p => {
             const badge = p.badge ? `<span class="card-badge badge-${p.badge}">${p.badge}</span>` : '';
             const oldP  = p.oldPrice ? `<span class="card-price-old">₱${p.oldPrice.toLocaleString()}</span>` : '';
             const wish  = `<div class="card-wish${p.wished ? ' active' : ''}" data-id="${p.id}" data-action="wish">
                                <i class='bx ${p.wished ? "bxs-heart" : "bx-heart"}'></i>
                            </div>`;
+                           
+            // New Stock Level Checks
+            const isOutOfStock = p.stock <= 0;
+            const stockText = isOutOfStock ? 'Out of Stock' : `Stock: ${p.stock}`;
+            const stockColor = isOutOfStock ? '#e74c3c' : '#2ecc71';
+
             return `
-            <div class="product-card">
+            <div class="product-card" style="${isOutOfStock ? 'opacity: 0.85;' : ''}">
                 ${badge}
                 ${wish}
                 <div class="card-img">
@@ -246,17 +253,20 @@
                 <div class="card-body">
                     <div class="card-cat">${p.category}</div>
                     <div class="card-name">${p.name}</div>
-                    <div class="card-stars">
+                    <div class="card-stars" style="display: flex; align-items: center; width: 100%;">
                         ${starsHTML(p.rating)}
                         <span>(${p.reviews})</span>
+                        <span style="margin-left: auto; font-size: 11px; color: ${stockColor}; font-weight: 600;">
+                            ${stockText}
+                        </span>
                     </div>
                     <div class="card-footer">
                         <div class="card-prices">
                             <span class="card-price">₱${p.price.toLocaleString()}</span>
                             ${oldP}
                         </div>
-                        <button class="card-add" data-id="${p.id}" data-action="cart">
-                            <i class='bx bx-cart-add'></i>
+                        <button class="card-add" data-id="${p.id}" data-action="cart" ${isOutOfStock ? 'style="background: #b2bec3; cursor: not-allowed;"' : ''}>
+                            <i class='bx ${isOutOfStock ? "bx-block" : "bx-cart-add"}'></i>
                         </button>
                     </div>
                 </div>
@@ -284,7 +294,6 @@
         render();
     });
 
-    // On products page, the nav search icon focuses the inline search box
     document.getElementById('search-trigger')?.addEventListener('click', e => {
         e.preventDefault();
         const inp = document.getElementById('search-input');
@@ -297,6 +306,12 @@
             e.stopPropagation();
             const p = PRODUCTS.find(x => x.id === +cartBtn.dataset.id);
             if (!p) return;
+            
+            // Intercept and stop click event if product is out of stock
+            if (p.stock <= 0) {
+                alert("Sorry, this product is out of stock!");
+                return;
+            }
             
             window.addToCart(p);
             showToast(`${p.name} added to cart`);
@@ -317,7 +332,6 @@
     });
 
     /* ── DYNAMIC GENERATOR FOR WISHLIST DRAWERS ── */
-
     window.toggleWishlistItem = function(id) {
         const p = PRODUCTS.find(x => x.id === id);
         if (p) { p.wished = false; window.wishRemove(id); showToast('Removed from wishlist'); render(); }
@@ -325,10 +339,19 @@
 
     window.moveFromWishToCart = function(id) {
         const p = PRODUCTS.find(x => x.id === id);
-        if (p) { window.addToCart(p); window.wishRemove(id); p.wished = false; showToast(`${p.name} moved to cart`); render(); }
+        if (p) { 
+            // Fallback check just in case
+            if (p.stock <= 0) {
+                alert("Sorry, this product is out of stock!");
+                return;
+            }
+            window.addToCart(p); 
+            window.wishRemove(id); 
+            p.wished = false; 
+            showToast(`${p.name} moved to cart`); 
+            render(); 
+        }
     };
-
-    /* Wishlist drawer wiring handled by wishlist.js */
 
     loadProducts().then(() => {
         const urlQ = new URLSearchParams(window.location.search).get('q');
@@ -341,7 +364,6 @@
 <script src="nav.js"></script>
 <div class="logo-hint" id="logo-hint"></div>
 
-<!-- ══ MOBILE BOTTOM NAV ══ -->
 <nav class="mobile-bottom-nav">
     <a href="index.html"><i class='bx bx-home-alt'></i>Home</a>
     <a href="products.html" class="active"><i class='bx bx-package'></i>Products</a>
