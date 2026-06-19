@@ -163,6 +163,10 @@
         /* ══ BOTTOM NAV — hidden by default, shown only on mobile ══ */
         .bottom-nav { display: none; }
 
+        /* ══ MOBILE CARDS — hidden by default, shown only on mobile ══ */
+        .mobile-cards { display: none; }
+        .cat-mobile-cards { display: none; }
+
         /* ════════════════════════════════════════════
            TABLET  ≤ 1024px  —  icon sidebar layout
            ════════════════════════════════════════════ */
@@ -325,6 +329,71 @@
 
             .topbar-title { font-size: 14px; }
             .sec-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            /* ── MOBILE PRODUCT CARDS (replaces table in inventory view) ── */
+            .table-wrap { background: transparent; border: none; border-radius: 0; overflow: visible; }
+            .table-wrap > table { display: none; }
+            .mobile-cards { display: flex; flex-direction: column; gap: 10px; }
+            .m-card {
+                background: #ffffff;
+                border: 1px solid #e6e6e4;
+                border-radius: 14px;
+                padding: 16px;
+            }
+            .m-card-top {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            .m-card-name { font-size: 14px; font-weight: 600; color: #111111; line-height: 1.3; }
+            .m-card-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+            .m-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+            .m-card-row {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: #777777;
+                padding: 5px 0;
+                border-top: 1px solid #f0f0ef;
+            }
+            .m-card-row span:last-child { font-weight: 500; color: #333333; text-align: right; }
+            .m-empty { text-align: center; padding: 48px 20px; color: #aaaaaa; background: #ffffff; border: 1px solid #e6e6e4; border-radius: 14px; }
+            .m-empty i { font-size: 36px; display: block; margin-bottom: 10px; }
+
+            /* ── MOBILE CATEGORY CARDS ── */
+            .cat-mobile-cards { display: flex; flex-direction: column; gap: 10px; }
+            .cat-m-card {
+                background: #ffffff;
+                border: 1px solid #e6e6e4;
+                border-radius: 14px;
+                padding: 16px;
+            }
+            .cat-m-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 12px;
+            }
+            .cat-m-name { font-size: 14px; font-weight: 600; color: #111111; }
+            .cat-m-count {
+                font-size: 12px;
+                font-weight: 600;
+                background: #111111;
+                color: #ffffff;
+                padding: 3px 10px;
+                border-radius: 20px;
+            }
+            .cat-m-row {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: #777777;
+                padding: 5px 0;
+                border-top: 1px solid #f0f0ef;
+            }
+            .cat-m-row span:last-child { font-weight: 500; color: #333333; }
         }
     </style>
 </head>
@@ -490,6 +559,8 @@
                         </thead>
                         <tbody id="inv-tbody"></tbody>
                     </table>
+                    <!-- Mobile card list (shown only on ≤640px via JS) -->
+                    <div class="mobile-cards" id="inv-mobile-cards"></div>
                 </div>
             </div>
 
@@ -511,6 +582,8 @@
                         </thead>
                         <tbody id="cat-tbody"></tbody>
                     </table>
+                    <!-- Mobile category cards (shown only on ≤640px via JS) -->
+                    <div class="cat-mobile-cards" id="cat-mobile-cards"></div>
                 </div>
             </div>
 
@@ -753,13 +826,16 @@ async function renderTable() {
     document.getElementById('inv-count').textContent = `${data.length} product${data.length !== 1 ? 's' : ''}`;
 
     const tbody = document.getElementById('inv-tbody');
-    if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class='bx bx-search-alt'></i><p>No products found.</p></div></td></tr>`;
-        return;
-    }
+    const mobileCards = document.getElementById('inv-mobile-cards');
 
     const stockClass = s => Number(s) === 0 ? 'stock-out' : Number(s) <= 10 ? 'stock-low' : 'stock-ok';
     const stockLabel = s => Number(s) === 0 ? 'Out of stock' : Number(s) <= 10 ? `${s} (low)` : s;
+
+    if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class='bx bx-search-alt'></i><p>No products found.</p></div></td></tr>`;
+        mobileCards.innerHTML = `<div class="m-empty"><i class='bx bx-search-alt'></i><p>No products found.</p></div>`;
+        return;
+    }
 
     tbody.innerHTML = data.map(p => `
         <tr>
@@ -777,6 +853,26 @@ async function renderTable() {
                 </div>
             </td>
         </tr>`).join('');
+
+    mobileCards.innerHTML = data.map(p => `
+        <div class="m-card">
+            <div class="m-card-top">
+                <div>
+                    <div class="m-card-name">${p.name}</div>
+                    <div class="m-card-badges">
+                        <span class="td-cat">${p.category}</span>
+                        ${p.badge ? `<span class="td-badge badge-${p.badge}">${p.badge}</span>` : ''}
+                    </div>
+                </div>
+                <div class="m-card-actions">
+                    <button class="btn-icon" title="Edit" onclick="openEdit(${p.id})"><i class='bx bx-edit'></i></button>
+                    <button class="btn-icon del" title="Delete" onclick="openDelete(${p.id}, '${p.name.replace(/'/g,"\\'")}')"><i class='bx bx-trash'></i></button>
+                </div>
+            </div>
+            <div class="m-card-row"><span>Price</span><span>&#8369;${p.price.toLocaleString()}${p.oldPrice ? ` <s style="color:#aaa;font-size:11px;">&#8369;${p.oldPrice.toLocaleString()}</s>` : ''}</span></div>
+            <div class="m-card-row"><span>Stock</span><span class="${stockClass(p.stock)}">${stockLabel(p.stock)}</span></div>
+            <div class="m-card-row"><span>Rating</span><span>${p.rating} &#11088; (${p.reviews} reviews)</span></div>
+        </div>`).join('');
 }
 
 /* ════════════════════════════════════════════
@@ -785,19 +881,35 @@ async function renderTable() {
 async function renderCategories() {
     const data = await dbRead();
     const cats = ['Laptops','Smartphones','Gaming','Smartwatches'];
-    document.getElementById('cat-tbody').innerHTML = cats.map(c => {
+
+    const rows = cats.map(c => {
         const items    = data.filter(p => p.category === c);
         const stock    = items.reduce((s,p)=>s+(p.stock||0),0);
         const avgPrice = items.length ? Math.round(items.reduce((s,p)=>s+p.price,0)/items.length) : 0;
         const low      = items.filter(p => p.stock <= 10).length;
-        return `<tr>
+        return { c, items, stock, avgPrice, low };
+    });
+
+    document.getElementById('cat-tbody').innerHTML = rows.map(({c, items, stock, avgPrice, low}) => `
+        <tr>
             <td class="td-name">${c}</td>
             <td>${items.length}</td>
             <td>${stock.toLocaleString()}</td>
-            <td>₱${avgPrice.toLocaleString()}</td>
+            <td>&#8369;${avgPrice.toLocaleString()}</td>
             <td class="${low ? 'stock-low' : 'stock-ok'}">${low || '—'}</td>
-        </tr>`;
-    }).join('');
+        </tr>`).join('');
+
+    // Mobile category cards
+    document.getElementById('cat-mobile-cards').innerHTML = rows.map(({c, items, stock, avgPrice, low}) => `
+        <div class="cat-m-card">
+            <div class="cat-m-header">
+                <span class="cat-m-name">${c}</span>
+                <span class="cat-m-count">${items.length} product${items.length !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="cat-m-row"><span>Total Stock</span><span>${stock.toLocaleString()} units</span></div>
+            <div class="cat-m-row"><span>Avg Price</span><span>&#8369;${avgPrice.toLocaleString()}</span></div>
+            <div class="cat-m-row"><span>Low Stock Items</span><span class="${low ? 'stock-low' : 'stock-ok'}">${low || '—'}</span></div>
+        </div>`).join('');
 }
 
 /* ════════════════════════════════════════════
