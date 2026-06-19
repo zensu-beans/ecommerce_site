@@ -354,12 +354,31 @@
     };
 
     loadProducts().then(() => {
-        const urlQ = new URLSearchParams(window.location.search).get('q');
-        if (urlQ) {
-            const inp = document.getElementById('search-input');
-            if (inp) { inp.value = urlQ; searchQuery = urlQ; render(); }
+
+    const params = new URLSearchParams(window.location.search);
+    const urlQ = params.get('q');
+    const urlCategory = params.get('category');
+
+    // Search support
+    if (urlQ) {
+        const inp = document.getElementById('search-input');
+        if (inp) {
+            inp.value = urlQ;
+            searchQuery = urlQ;
         }
-    });
+    }
+
+    // Category support (NEW)
+    if (urlCategory) {
+        const formatted =
+            urlCategory.charAt(0).toUpperCase() +
+            urlCategory.slice(1).toLowerCase();
+
+        currentCat = formatted;
+    }
+
+    render();
+});
 </script>
 <script src="nav.js"></script>
 <div class="logo-hint" id="logo-hint"></div>
